@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -15,6 +16,18 @@ final class ProductController
      */
     public function listProducts()
     {
-        return [];
+        return $this->createExampleProducts();
+    }
+
+    private function createExampleProducts(): array
+    {
+        $product = new Product();
+        $product->id = 123;
+        $product->name = 'Apple';
+        $product->description = 'A tasty snack.';
+        $product->price = 49;
+        $product->taxRate = 700;
+
+        return [$product];
     }
 }

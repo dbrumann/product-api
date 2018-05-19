@@ -15,6 +15,9 @@ class ProductControllerTest extends WebTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
-        $this->assertEquals('[]', $response->getContent());
+        $this->assertJsonStringEqualsJsonString(
+            '[{"id":123,"name":"Apple","description":"A tasty snack.","price":49,"taxRate":700}]',
+            $response->getContent()
+        );
     }
 }
