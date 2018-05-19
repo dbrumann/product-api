@@ -1,0 +1,17 @@
+language: php
+sudo: false
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+
+php:
+    - 7.2
+
+before_install:
+    - composer self-update
+
+install:
+    - composer install --no-scripts --no-interaction
+
+script:
+    - bin/phpunit
