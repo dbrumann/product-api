@@ -4,18 +4,19 @@ namespace App\Controller\Api;
 
 use App\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/api", name="api_")
  */
-final class ProductController
+final class ProductController extends AbstractController
 {
     /**
      * @Route("/products", name="products_list", methods={"GET"})
      */
     public function listProducts()
     {
-        return $this->createExampleProducts();
+        return $this->getDoctrine()->getRepository(Product::class)->findAll();
     }
 
     /**
@@ -23,25 +24,11 @@ final class ProductController
      */
     public function getProduct(int $id)
     {
-        $product = new Product();
-        $product->id = $id;
-        $product->name = 'Apple';
-        $product->description = 'A tasty snack.';
-        $product->price = 49;
-        $product->taxRate = 700;
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+        if (!$product) {
+            $this->createNotFoundException(sprintf('Could not find a product with id "%d".', $id));
+        }
 
         return $product;
-    }
-
-    private function createExampleProducts(): array
-    {
-        $product = new Product();
-        $product->id = 123;
-        $product->name = 'Apple';
-        $product->description = 'A tasty snack.';
-        $product->price = 49;
-        $product->taxRate = 700;
-
-        return [$product];
     }
 }

@@ -10,13 +10,13 @@ final class ProductFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $banana = new Product();
-        $banana->id = 123;
-        $banana->name = 'Apple';
-        $banana->description = 'A tasty snack.';
-        $banana->price = 49;
-        $banana->taxRate = 700;
-        $manager->persist($banana);
+        $apple = new Product();
+        $apple->id = 123;
+        $apple->name = 'Apple';
+        $apple->description = 'A tasty snack.';
+        $apple->price = 49;
+        $apple->taxRate = 700;
+        $manager->persist($apple);
 
         $banana = new Product();
         $banana->id = 234;

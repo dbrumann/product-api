@@ -15,22 +15,20 @@ class ProductControllerTest extends WebTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
-        $this->assertJsonStringEqualsJsonString(
-            '[{"id":123,"name":"Apple","description":"A tasty snack.","price":49,"taxRate":700}]',
-            $response->getContent()
-        );
+        $this->assertJson($response->getContent());
     }
+
     public function test_products_get_is_accessible()
     {
         $client = static::createClient();
 
-        $client->request('GET', '/api/products/234');
+        $client->request('GET', '/api/products/123');
         $response = $client->getResponse();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
         $this->assertJsonStringEqualsJsonString(
-            '{"id":234,"name":"Apple","description":"A tasty snack.","price":49,"taxRate":700}',
+            '{"id":123,"name":"Apple","description":"A tasty snack.","price":49,"taxRate":700}',
             $response->getContent()
         );
     }
