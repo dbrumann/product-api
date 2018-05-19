@@ -2,11 +2,11 @@
 
 namespace App\Api\Response;
 
-use function strpos;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function strpos;
 
 final class ControllerResultToJsonResponseSubscriber implements EventSubscriberInterface
 {

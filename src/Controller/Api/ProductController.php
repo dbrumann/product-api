@@ -4,7 +4,6 @@ namespace App\Controller\Api;
 
 use App\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/api", name="api_")

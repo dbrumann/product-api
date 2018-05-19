@@ -20,4 +20,19 @@ class ProductControllerTest extends WebTestCase
             $response->getContent()
         );
     }
+
+    public function test_not_found_returns_json_error()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/api/spaceships');
+        $response = $client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertSame('application/json', $response->headers->get('Content-Type'));
+        $this->assertJsonStringEqualsJsonString(
+            '{"type":"NotFoundHttpException","message":"No route found for \"GET \/api\/spaceships\""}',
+            $response->getContent()
+        );
+    }
 }
