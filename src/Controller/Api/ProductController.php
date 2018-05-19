@@ -18,6 +18,21 @@ final class ProductController
         return $this->createExampleProducts();
     }
 
+    /**
+     * @Route("/products/{id}", name="product_get", requirements={"id": "\d+"}, methods={"GET"})
+     */
+    public function getProduct(int $id)
+    {
+        $product = new Product();
+        $product->id = $id;
+        $product->name = 'Apple';
+        $product->description = 'A tasty snack.';
+        $product->price = 49;
+        $product->taxRate = 700;
+
+        return $product;
+    }
+
     private function createExampleProducts(): array
     {
         $product = new Product();
