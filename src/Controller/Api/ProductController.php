@@ -6,6 +6,7 @@ use App\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/api", name="api_")
@@ -27,7 +28,7 @@ final class ProductController extends AbstractController
     {
         $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
         if (!$product) {
-            $this->createNotFoundException(sprintf('Could not find a product with id "%d".', $id));
+            throw new NotFoundHttpException(sprintf('Could not find a product with id "%d".', $id));
         }
 
         return $product;
@@ -48,5 +49,37 @@ final class ProductController extends AbstractController
         ];
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED, $headers);
+    }
+
+    /**
+     * @Route("/products/{id}", name="products_update", methods={"POST"})
+     */
+    public function updateProduct(int $id, Product $product)
+    {
+        $existingProduct = $this->getProduct($id);
+
+        $existingProduct->name = $product->name ?? $existingProduct->name;
+        $existingProduct->description = $product->description ?? $existingProduct->description;
+        $existingProduct->price = $product->price ?? $existingProduct->price;
+        $existingProduct->taxRate = $product->taxRate ?? $existingProduct->taxRate;
+
+        $manager = $this->getDoctrine()->getManagerForClass(Product::class);
+        $manager->flush();
+
+        return $existingProduct;
+    }
+
+    /**
+     * @Route("/products/{id}", name="products_delete", methods={"DELETE"})
+     */
+    public function deleteProduct(int $id)
+    {
+        $existingProduct = $this->getProduct($id);
+
+        $manager = $this->getDoctrine()->getManagerForClass(Product::class);
+        $manager->remove($existingProduct);
+        $manager->flush();
+
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 }

@@ -42,8 +42,8 @@ class Product
         $product->id = (int) $raw['id'];
         $product->name = $raw['name'];
         $product->description = $raw['description'];
-        $product->price = (int) $raw['price'];
-        $product->taxRate = (int) $raw['taxRate'];
+        $product->price = !empty($raw['price']) ? (int) $raw['price'] : null;
+        $product->taxRate = !empty($raw['price']) ? (int) $raw['taxRate'] : null;
 
         return $product;
     }

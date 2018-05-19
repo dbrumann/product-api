@@ -3,12 +3,13 @@
 namespace App\Tests\Controller\Api;
 
 use App\Entity\Product;
+use function json_decode;
 use function json_encode;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ProductControllerTest extends WebTestCase
 {
-    public function test_products_list_is_accessible()
+    public function test_listing_all_products()
     {
         $client = static::createClient();
 
@@ -20,7 +21,7 @@ class ProductControllerTest extends WebTestCase
         $this->assertJson($response->getContent());
     }
 
-    public function test_products_get_is_accessible()
+    public function test_getting_single_product()
     {
         $client = static::createClient();
 
@@ -35,7 +36,7 @@ class ProductControllerTest extends WebTestCase
         );
     }
 
-    public function test_producs_add_is_accessible()
+    public function test_creating_product()
     {
         $product = new Product();
         $product->id = 789;
@@ -61,6 +62,44 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
         $this->assertJsonStringEqualsJsonString($productJson, $response->getContent());
+    }
+
+    public function test_updating_existing_product()
+    {
+        $product = new Product();
+        $product->description = 'Sweet, yellow fruit.';
+        $productJson = json_encode($product);
+
+        $client = static::createClient();
+
+        $client->request('POST', '/api/products/234', [], [], [], $productJson);
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame('application/json', $response->headers->get('Content-Type'));
+
+        $updatedProduct = Product::fromArray(json_decode($response->getContent(), true));
+
+        $this->assertEquals(234, $updatedProduct->id);
+        $this->assertSame('Banana', $updatedProduct->name);
+        $this->assertSame($product->description, $updatedProduct->description);
+        $this->assertEquals(39, $updatedProduct->price);
+        $this->assertEquals(700, $updatedProduct->taxRate);
+    }
+
+    public function test_deleting_product()
+    {
+        $client = static::createClient();
+
+        $client->request('DELETE', '/api/products/234');
+        $response = $client->getResponse();
+
+        $this->assertEquals(204, $response->getStatusCode());
+
+        $client->request('GET', '/api/products/234');
+        $response = $client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function test_not_found_returns_json_error()
