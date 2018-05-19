@@ -3,6 +3,7 @@ sudo: false
 cache:
     directories:
         - $HOME/.composer/cache/files
+        - bin/.phpunit
 
 php:
     - 7.2
