@@ -15,6 +15,6 @@ final class ProductController
      */
     public function listProducts()
     {
-        return new JsonResponse([]);
+        return [];
     }
 }

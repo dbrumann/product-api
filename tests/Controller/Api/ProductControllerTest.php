@@ -15,5 +15,6 @@ class ProductControllerTest extends WebTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
+        $this->assertEquals('[]', $response->getContent());
     }
 }
