@@ -43,17 +43,24 @@ class ProductControllerTest extends WebTestCase
         $product->description = 'A round and orange fruit.';
         $product->price = 19;
         $product->taxRate = 700;
-        $json = json_encode($product);
+        $productJson = json_encode($product);
 
         $client = static::createClient();
 
-        $client->request('POST', '/api/products', [], [], [], $json);
+        $client->request('POST', '/api/products', [], [], [], $productJson);
         $response = $client->getResponse();
 
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
         $this->assertTrue($response->headers->has('Location'));
         $this->assertContains('/api/products/789', $response->headers->get('Location'));
+
+        $client->request('GET', $response->headers->get('Location'));
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame('application/json', $response->headers->get('Content-Type'));
+        $this->assertJsonStringEqualsJsonString($productJson, $response->getContent());
     }
 
     public function test_not_found_returns_json_error()
