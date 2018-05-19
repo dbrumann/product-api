@@ -2,16 +2,37 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity()
+ */
 class Product
 {
+    /**
+     * @ORM\Id()
+     * @ORM\Column(type="integer")
+     */
     public $id;
 
+    /**
+     * @ORM\Column()
+     */
     public $name;
 
+    /**
+     * @ORM\Column(type="text")
+     */
     public $description;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
     public $price;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
     public $taxRate;
 
     public static function fromArray(array $raw): self
